@@ -1,8 +1,14 @@
 import { Request, Response } from "express";
 import { adminServices } from "./admin.service";
+import { utilFunctions } from "../../utils/utils";
 
 const getAllAdmins = async (req: Request, res: Response) => {
-  const query = req.query;
+  const query = utilFunctions.pickFilters(req.query, [
+    "name",
+    "email",
+    "searchTerm",
+    "contactNumber",
+  ]);
   try {
     const result = await adminServices.getAllAdmins(query);
     res.status(200).json({

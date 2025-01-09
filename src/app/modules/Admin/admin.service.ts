@@ -2,10 +2,11 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { searchQueryType } from "../../types/queryTypes";
 
 const prisma = new PrismaClient();
-const getAllAdmins = async (params: any) => {
+const getAllAdmins = async (params: any, pagination: any) => {
   //console.log(params);
   const andConditions: Prisma.AdminWhereInput[] = [];
   const { searchTerm, ...filterData } = params;
+  const { page, limit } = pagination;
   const searchFields = ["name", "email"];
   if (params.searchTerm) {
     andConditions.push({
@@ -32,6 +33,8 @@ const getAllAdmins = async (params: any) => {
   };
   const result = await prisma.admin.findMany({
     where: whereConditions,
+    skip: (Number(page) - 1) * limit,
+    take: Number(limit),
   });
   return result;
 };

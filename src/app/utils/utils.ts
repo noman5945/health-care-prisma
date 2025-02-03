@@ -4,6 +4,12 @@ async function encryptPassword(plainTextPass: string) {
   return await bcrypt.hash(plainTextPass, 12);
 }
 
+/**
+ *
+ * @param obj An Object containing fillters given by client
+ * @param keys filters that are desired
+ * @returns Filters that are needed for certain query
+ */
 function pickFilters<T extends Record<string, unknown>, K extends keyof T>(
   obj: T,
   keys: K[]

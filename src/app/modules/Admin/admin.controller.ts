@@ -12,6 +12,25 @@ const getAllAdmins = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "All Admins fetched Successfully ",
+      meta: result.meta,
+      data: result.data,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error?.name || "Something went wrong",
+      error: error,
+    });
+  }
+};
+
+const getAdminByID = async (req: Request, res: Response) => {
+  const id = req.query.id;
+  try {
+    const result = await adminServices.getAdminByID(id);
+    res.status(200).json({
+      success: true,
+      message: "All Admins fetched Successfully ",
       data: result,
     });
   } catch (error: any) {
@@ -25,4 +44,5 @@ const getAllAdmins = async (req: Request, res: Response) => {
 
 export const adminControllers = {
   getAllAdmins,
+  getAdminByID,
 };

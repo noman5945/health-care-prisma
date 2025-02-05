@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Admin, Prisma, PrismaClient } from "@prisma/client";
 import { searchQueryType } from "../../types/queryTypes";
 import { paginationHelper } from "../../utils/calculatePagination";
 
@@ -57,9 +57,26 @@ const getAllAdmins = async (params: any, pagination: any) => {
   };
 };
 
-const getAdminByID = async (id: any) => {};
+const getAdminByID = async (id: string) => {
+  const result = await prisma.admin.findUnique({
+    where: {
+      id,
+    },
+  });
+  return result;
+};
+
+const updateAdminByID = async (id: string, data: Partial<Admin>) => {
+  const result = await prisma.admin.update({
+    where: {
+      id: id,
+    },
+    data,
+  });
+};
 
 export const adminServices = {
   getAllAdmins,
   getAdminByID,
+  updateAdminByID,
 };

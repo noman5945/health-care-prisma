@@ -32,6 +32,7 @@ const getAllAdmins = async (params: any, pagination: any) => {
   //console.dir(andConditions, { depth: "infinity" });
   const whereConditions: Prisma.AdminWhereInput = {
     AND: andConditions,
+    isDeleted: false,
   };
   const result = await prisma.admin.findMany({
     where: whereConditions,
@@ -61,6 +62,7 @@ const getAdminByID = async (id: string) => {
   const result = await prisma.admin.findUnique({
     where: {
       id,
+      isDeleted: false,
     },
   });
   return result;
@@ -90,9 +92,34 @@ const deleteAdminByID = async (id: string) => {
   return result;
 };
 
+const softDeleteAdminByID = async (id: string) => {
+  const result = await prisma.$transaction(async (transactionClient) => {
+    const adminStatsUpdate = await transactionClient.admin.update({
+      where: {
+        id: id,
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
+    const userStatusUpdate = await transactionClient.user.update({
+      where: {
+        email: adminStatsUpdate.email,
+      },
+      data: {
+        status: "DELETED",
+      },
+    });
+    return adminStatsUpdate;
+  });
+
+  return result;
+};
+
 export const adminServices = {
   getAllAdmins,
   getAdminByID,
   updateAdminByID,
   deleteAdminByID,
+  softDeleteAdminByID,
 };

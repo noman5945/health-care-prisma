@@ -59,7 +59,7 @@ const getAllAdmins = async (params: any, pagination: any) => {
 };
 
 const getAdminByID = async (id: string) => {
-  const result = await prisma.admin.findUnique({
+  const result = await prisma.admin.findUniqueOrThrow({
     where: {
       id,
       isDeleted: false,

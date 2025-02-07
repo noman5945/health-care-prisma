@@ -1,7 +1,8 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
-import { userRoutes } from "./app/modules/User/user.routes";
-import { AdminRouter } from "./app/modules/Admin/admin.routes";
+import router from "./app/routes/routes";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler";
+import { StatusCodes } from "http-status-codes";
 const app: Application = express();
 
 app.use(cors());
@@ -13,7 +14,19 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/admin", AdminRouter);
+app.use("/api/v1", router);
+app.use(globalErrorHandler);
+
+//Non existent API handle not working
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(StatusCodes.NOT_FOUND).json({
+    success: false,
+    message: "API Not Found",
+    error: {
+      path: req.originalUrl,
+      message: "This API does not exist.",
+    },
+  });
+});
 
 export default app;

@@ -1,4 +1,6 @@
 import bcrypt from "bcrypt";
+import { NextFunction, Request, RequestHandler, Response } from "express";
+import { StatusCodes } from "http-status-codes";
 
 async function encryptPassword(plainTextPass: string) {
   return await bcrypt.hash(plainTextPass, 12);
@@ -25,7 +27,28 @@ function pickFilters<T extends Record<string, unknown>, K extends keyof T>(
   return finalObj;
 }
 
+/**
+ * A higher order function to abstract away and prevent repeatetion of try catch
+ * @param fn A request handler type function with request and response arguments
+ * @returns An async function
+ */
+function handleRequestTryCatch(fn: RequestHandler) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await fn(req, res, next);
+    } catch (error: any) {
+      //next(error);
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: error?.name || "Something went wrong",
+        error: error,
+      });
+    }
+  };
+}
+
 export const utilFunctions = {
   encryptPassword,
   pickFilters,
+  handleRequestTryCatch,
 };

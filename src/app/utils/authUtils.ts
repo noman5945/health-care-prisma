@@ -1,5 +1,5 @@
 import * as bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 const checkPassword = async (givenPass: string, encryptedPass: string) => {
   return await bcrypt.compare(givenPass, encryptedPass);
 };
@@ -17,8 +17,13 @@ const genarateRefreshToken = (payload: { email: string; password: string }) => {
   });
 };
 
+const verifyToken = (token: string, secret: Secret) => {
+  return jwt.verify(token, secret) as JwtPayload;
+};
+
 export const AuthUtils = {
   checkPassword,
   genarateAccessToken,
   genarateRefreshToken,
+  verifyToken,
 };

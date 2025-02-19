@@ -20,6 +20,20 @@ const loginUser = utilFunctions.handleRequestTryCatch(
   }
 );
 
+const getNewAccessToken = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken;
+    const result = await AuthServices.getNewaccessToken(refreshToken);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "User logged in successfully",
+      data: result,
+    });
+  }
+);
+
 export const AuthController = {
   loginUser,
+  getNewAccessToken,
 };

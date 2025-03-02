@@ -1,5 +1,7 @@
 import { Prisma, PrismaClient, UserStatus } from "@prisma/client";
 import { AuthUtils } from "../../utils/authUtils";
+import config from "../../../config";
+import { Secret } from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 const loginUser = async (payload: { email: string; password: string }) => {
@@ -26,7 +28,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
 const getNewaccessToken = async (token: string) => {
   let decoded;
   try {
-    decoded = AuthUtils.verifyToken(token, "gfdgdfgdghi");
+    decoded = AuthUtils.verifyToken(token, config.jwt.refresh_token as Secret);
   } catch (error) {
     throw new Error("You are not authorized");
   }

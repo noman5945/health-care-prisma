@@ -9,7 +9,7 @@ const createAdminService = async (data: any) => {
   const userData = {
     email: data.admin.email,
     password: hashedPassword,
-    role: UserRole.ADMIN,
+    role: UserRole.SUPER_ADMIN,
   };
   const result = await prisma.$transaction(async (transClient) => {
     const createUserData = await transClient.user.create({

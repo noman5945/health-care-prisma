@@ -5,13 +5,13 @@ const checkPassword = async (givenPass: string, encryptedPass: string) => {
   return await bcrypt.compare(givenPass, encryptedPass);
 };
 
-const genarateAccessToken = (payload: { email: string; password: string }) => {
+const genarateAccessToken = (payload: { email: string; role: string }) => {
   return jwt.sign(payload, config.jwt.jwt_secret as Secret, {
     algorithm: "HS256",
     expiresIn: "5m",
   });
 };
-const genarateRefreshToken = (payload: { email: string; password: string }) => {
+const genarateRefreshToken = (payload: { email: string; role: string }) => {
   return jwt.sign(payload, config.jwt.refresh_token as Secret, {
     algorithm: "HS256",
     expiresIn: "30d",

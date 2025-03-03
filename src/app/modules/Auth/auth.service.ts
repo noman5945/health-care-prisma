@@ -15,8 +15,12 @@ const loginUser = async (payload: { email: string; password: string }) => {
   if (!correctPassword) {
     throw new Error("Incorrect Password!");
   }
-  const accessToken = AuthUtils.genarateAccessToken(payload);
-  const refreshToken = AuthUtils.genarateRefreshToken(payload);
+  const UserInfo = {
+    email: payload.email,
+    role: user.role,
+  };
+  const accessToken = AuthUtils.genarateAccessToken(UserInfo);
+  const refreshToken = AuthUtils.genarateRefreshToken(UserInfo);
 
   return {
     accessToken,

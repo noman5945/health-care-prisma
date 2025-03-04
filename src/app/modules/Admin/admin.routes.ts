@@ -11,9 +11,25 @@ router.get(
   adminControllers.getAllAdmins
 );
 
-router.get("/:id", adminControllers.getAdminByID);
-router.patch("/:id", adminControllers.updateAdminByID);
-router.delete("/:id", adminControllers.deleteAdminByID);
-router.delete("/softdel/:id", adminControllers.softdeleteAdminByID);
+router.get(
+  "/:id",
+  authorise(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  adminControllers.getAdminByID
+);
+router.patch(
+  "/:id",
+  authorise(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  adminControllers.updateAdminByID
+);
+router.delete(
+  "/:id",
+  authorise(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  adminControllers.deleteAdminByID
+);
+router.delete(
+  "/softdel/:id",
+  authorise(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  adminControllers.softdeleteAdminByID
+);
 
 export const AdminRouter = router;

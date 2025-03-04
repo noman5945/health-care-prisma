@@ -2,6 +2,7 @@ import { Prisma, PrismaClient, UserStatus } from "@prisma/client";
 import { AuthUtils } from "../../utils/authUtils";
 import config from "../../../config";
 import { Secret } from "jsonwebtoken";
+import { utilFunctions } from "../../utils/utils";
 
 const prisma = new PrismaClient();
 const loginUser = async (payload: { email: string; password: string }) => {
@@ -45,7 +46,34 @@ const getNewaccessToken = async (token: string) => {
   return UserExists;
 };
 
+const changePassword = async (
+  user: any,
+  oldPassword: string,
+  newPassword: string
+) => {
+  const email = user.email;
+  const currentUser = await prisma.user.findUniqueOrThrow({
+    where: { email: email },
+  });
+  const correctPassword = await AuthUtils.checkPassword(
+    oldPassword,
+    currentUser.password
+  );
+  if (!correctPassword) {
+    throw new Error("Incorrect old Password!");
+  }
+  const hashedPassword: string = await utilFunctions.encryptPassword(
+    newPassword
+  );
+  const updated = await prisma.user.update({
+    where: { email: email },
+    data: { password: hashedPassword, needPasswordChange: false },
+  });
+  return updated;
+};
+
 export const AuthServices = {
   loginUser,
   getNewaccessToken,
+  changePassword,
 };

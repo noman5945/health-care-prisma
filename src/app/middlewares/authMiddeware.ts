@@ -20,6 +20,7 @@ const authorise = (...role: string[]) => {
         config.jwt.jwt_secret as Secret
       );
       console.log(decoded);
+      req.user = decoded;
       if (role.length && !role.includes(decoded.role)) {
         throw new ApiError(StatusCodes.FORBIDDEN, "You are not Authorized");
       }

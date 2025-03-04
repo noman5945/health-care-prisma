@@ -26,6 +26,16 @@ export class GenericRepository<T> {
     });
   }
 
+  async updateByEmail(email: string, updateData: any) {
+    await (prisma[this.model] as any).findUniqueOrThrow({
+      where: { email: email },
+    });
+    return await (prisma[this.model] as any).update({
+      where: { email: email },
+      data: updateData,
+    });
+  }
+
   // Read all records or a single record by ID
   async read(id?: string): Promise<T | T[]> {
     if (id) {

@@ -33,7 +33,26 @@ const getNewAccessToken = utilFunctions.handleRequestTryCatch(
   }
 );
 
+const changePassword = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+    const { oldPassword, newPassword } = req.body;
+    const result = await AuthServices.changePassword(
+      user,
+      oldPassword,
+      newPassword
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Password changed successfully",
+      data: result,
+    });
+  }
+);
+
 export const AuthController = {
   loginUser,
   getNewAccessToken,
+  changePassword,
 };

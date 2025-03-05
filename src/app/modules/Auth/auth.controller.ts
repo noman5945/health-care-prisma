@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import sendResponse from "../../utils/sendResponse";
 import { utilFunctions } from "../../utils/utils";
 import { AuthServices } from "./auth.service";
@@ -51,8 +51,40 @@ const changePassword = utilFunctions.handleRequestTryCatch(
   }
 );
 
+const forgotPassword = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const email = req.body.email;
+    const result = await AuthServices.forgotPassword({ email: email });
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "New token for password reset",
+      data: result,
+    });
+  }
+);
+
+const resetPassword = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const token = req.headers.authorization || "";
+    const payload = {
+      id: req.body.id,
+      newPassword: req.body.newPass,
+    };
+    const result = await AuthServices.resetPassword(token as string, payload);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Password reset successfull",
+      data: result,
+    });
+  }
+);
+
 export const AuthController = {
   loginUser,
   getNewAccessToken,
   changePassword,
+  forgotPassword,
+  resetPassword,
 };

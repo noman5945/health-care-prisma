@@ -18,6 +18,13 @@ const genarateRefreshToken = (payload: { email: string; role: string }) => {
   });
 };
 
+const generateToken = (payload: any, token: Secret, expireTime: number) => {
+  return jwt.sign(payload, token, {
+    algorithm: "HS256",
+    expiresIn: expireTime,
+  });
+};
+
 const verifyToken = (token: string, secret: Secret) => {
   return jwt.verify(token, secret) as JwtPayload;
 };
@@ -27,4 +34,5 @@ export const AuthUtils = {
   genarateAccessToken,
   genarateRefreshToken,
   verifyToken,
+  generateToken,
 };

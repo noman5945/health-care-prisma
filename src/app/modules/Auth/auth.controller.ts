@@ -27,7 +27,7 @@ const getNewAccessToken = utilFunctions.handleRequestTryCatch(
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
-      message: "User logged in successfully",
+      message: "Access token retrived successfully",
       data: result,
     });
   }

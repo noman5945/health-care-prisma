@@ -1,8 +1,16 @@
 import { PrismaClient, UserRole } from "@prisma/client";
 import { utilFunctions } from "../../utils/utils";
+import uploadImage from "../../utils/imageUpload";
 
 const prisma = new PrismaClient();
-const createAdminService = async (data: any) => {
+const createAdminService = async (incomingUserData: any, file: any) => {
+  const data = JSON.parse(incomingUserData);
+
+  if (file) {
+    const uploadResult = await uploadImage(file);
+    data.admin.profilePhoto = uploadResult?.secure_url;
+  }
+
   const hashedPassword: string = await utilFunctions.encryptPassword(
     data.password
   );

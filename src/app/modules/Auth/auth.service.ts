@@ -46,7 +46,13 @@ const getNewaccessToken = async (token: string) => {
       status: UserStatus.ACTIVE,
     },
   });
-  return UserExists;
+  const UserInfo = {
+    email: UserExists.email,
+    role: UserExists.role,
+  };
+  const accessToken = AuthUtils.genarateAccessToken(UserInfo);
+
+  return { accessToken };
 };
 
 const changePassword = async (

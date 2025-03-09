@@ -11,5 +11,17 @@ router.post(
   authorise("SUPER_ADMIN", "ADMIN"),
   userController.createAdmin
 );
+router.post(
+  "/create-doctor",
+  fileUploader.upload.single("file"),
+  authorise("SUPER_ADMIN", "ADMIN"),
+  userController.createDoctor
+);
+
+router.post(
+  "/create-patient",
+  fileUploader.upload.single("file"),
+  userController.createPatient
+);
 
 export const userRoutes = router;

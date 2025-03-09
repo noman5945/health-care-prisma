@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import config from "../../config";
 import { NextFunction } from "express";
+import fs from "fs";
 
 // Configuration
 cloudinary.config({
@@ -19,7 +20,7 @@ const uploadImage = async (filePath: any) => {
     .catch((error) => {
       console.log(error);
     });
-
+  fs.unlinkSync(filePath.path);
   return uploadResult;
   /*  
     Some Extra works...

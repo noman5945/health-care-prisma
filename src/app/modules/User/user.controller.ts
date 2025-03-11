@@ -3,6 +3,7 @@ import { userServices } from "./user.services";
 import { utilFunctions } from "../../utils/utils";
 import sendResponse from "../../utils/sendResponse";
 import { StatusCodes } from "http-status-codes";
+import { userFilterableFields, userPaginationOptions } from "./user.constants";
 
 const createAdmin = async (req: Request, res: Response) => {
   try {
@@ -54,7 +55,19 @@ const createPatient = utilFunctions.handleRequestTryCatch(
   }
 );
 
-const getAllUsers = async () => {};
+const getAllUsers = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const filters = utilFunctions.pickFilters(req.query, userFilterableFields);
+    const options = utilFunctions.pickFilters(req.query, userPaginationOptions);
+    const result = await userServices.getAllUsers(filters, options);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Users fetched Successfully",
+      data: result,
+    });
+  }
+);
 
 export const userController = {
   createAdmin,

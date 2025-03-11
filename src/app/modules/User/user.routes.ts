@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { userController } from "./user.controller";
 import authorise from "../../middlewares/authMiddeware";
 import { fileUploader } from "../../utils/fileUploader";
+import { UserRole } from "@prisma/client";
 
 const router = express.Router();
 
@@ -22,6 +23,12 @@ router.post(
   "/create-patient",
   fileUploader.upload.single("file"),
   userController.createPatient
+);
+
+router.get(
+  "/",
+  authorise(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  userController.getAllUsers
 );
 
 export const userRoutes = router;

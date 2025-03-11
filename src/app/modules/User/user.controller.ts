@@ -69,9 +69,23 @@ const getAllUsers = utilFunctions.handleRequestTryCatch(
   }
 );
 
+const getUserProfile = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const currentUser = req.user;
+    const result = await userServices.getMyProfile(currentUser);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Users fetched Successfully",
+      data: result,
+    });
+  }
+);
+
 export const userController = {
   createAdmin,
   getAllUsers,
   createDoctor,
   createPatient,
+  getUserProfile,
 };

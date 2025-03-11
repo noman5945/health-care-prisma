@@ -31,4 +31,15 @@ router.get(
   userController.getAllUsers
 );
 
+router.get(
+  "/me",
+  authorise(
+    UserRole.ADMIN,
+    UserRole.SUPER_ADMIN,
+    UserRole.PATIENT,
+    UserRole.DOCTOR
+  ),
+  userController.getUserProfile
+);
+
 export const userRoutes = router;

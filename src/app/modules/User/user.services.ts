@@ -3,8 +3,10 @@ import { utilFunctions } from "../../utils/utils";
 import uploadImage from "../../utils/imageUpload";
 import { IOptions } from "../Admin/admin.interface";
 import { paginationHelper } from "../../utils/calculatePagination";
-import { IUserFilter } from "./user.interface";
+import { ICurrentUserInfo, IUserFilter } from "./user.interface";
 import { userSearchAbleFields } from "./user.constants";
+import { JwtPayload } from "jsonwebtoken";
+import { GenericRepository } from "../../repository/generic.repository";
 
 const prisma = new PrismaClient();
 const createAdminService = async (incomingUserData: any, file: any) => {
@@ -158,9 +160,18 @@ const getAllUsers = async (params: any, options: IOptions) => {
   };
 };
 
+const getMyProfile = async (user: JwtPayload) => {
+  const table = user.role.toLowerCase();
+  const genericRepo = new GenericRepository(table);
+  const profile = await genericRepo.readProfileExternal(user.email, table);
+  const userInfo = await genericRepo.readProfileExternal(user.email, "user");
+  return { profile, userInfo };
+};
+
 export const userServices = {
   createAdminService,
   createDoctorService,
   createPatientService,
   getAllUsers,
+  getMyProfile,
 };

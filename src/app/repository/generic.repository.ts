@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 export class GenericRepository<T> {
   private model: keyof typeof prisma;
   private primaryKey: string;
+  private externalPrisma?: PrismaClient;
 
   constructor(model: keyof typeof prisma, primaryKey: string = "id") {
     this.model = model;
@@ -45,6 +46,14 @@ export class GenericRepository<T> {
     } else {
       return await (prisma[this.model] as any).findMany();
     }
+  }
+  async readProfileExternal(
+    email: string,
+    table: keyof typeof prisma
+  ): Promise<T> {
+    return await (prisma[table] as any).findUniqueOrThrow({
+      where: { email: email },
+    });
   }
 
   // Delete a record by ID

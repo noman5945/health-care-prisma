@@ -5,3 +5,10 @@ export type IUserFilter = {
   status?: string;
   searchTerm?: string;
 };
+
+export type ICurrentUserInfo = {
+  email: string;
+  role: string;
+  iat: number;
+  exp: number;
+};

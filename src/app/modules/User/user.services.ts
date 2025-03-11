@@ -161,7 +161,11 @@ const getAllUsers = async (params: any, options: IOptions) => {
 };
 
 const getMyProfile = async (user: JwtPayload) => {
-  const table = user.role.toLowerCase();
+  let table = user.role.toLowerCase();
+
+  if (table === "admin" || table === "super_admin") {
+    table = "admin";
+  }
   const genericRepo = new GenericRepository(table);
   const profile = await genericRepo.readProfileExternal(user.email, table);
   const userInfo = await genericRepo.readProfileExternal(user.email, "user");

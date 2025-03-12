@@ -42,4 +42,16 @@ router.get(
   userController.getUserProfile
 );
 
+router.patch(
+  "/update-profile",
+  fileUploader.upload.single("file"),
+  authorise(
+    UserRole.ADMIN,
+    UserRole.SUPER_ADMIN,
+    UserRole.PATIENT,
+    UserRole.DOCTOR
+  ),
+  userController.updateMyProfile
+);
+
 export const userRoutes = router;

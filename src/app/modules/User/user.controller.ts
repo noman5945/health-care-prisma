@@ -82,10 +82,29 @@ const getUserProfile = utilFunctions.handleRequestTryCatch(
   }
 );
 
+const updateMyProfile = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const currentUser = req.user;
+    const updateDataPayload = req.body.data;
+    const result = await userServices.updateMyProfile(
+      currentUser,
+      updateDataPayload,
+      req.file
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Users fetched Successfully",
+      data: result,
+    });
+  }
+);
+
 export const userController = {
   createAdmin,
   getAllUsers,
   createDoctor,
   createPatient,
   getUserProfile,
+  updateMyProfile,
 };

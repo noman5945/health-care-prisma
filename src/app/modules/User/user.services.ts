@@ -172,10 +172,29 @@ const getMyProfile = async (user: JwtPayload) => {
   return { profile, userInfo };
 };
 
+const updateMyProfile = async (currentUser: any, payload: any, file: any) => {
+  const payloadObj = JSON.parse(payload);
+  if (file) {
+    const uploadResult = await uploadImage(file);
+    payloadObj.profilePhoto = uploadResult?.secure_url;
+  }
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { email: currentUser.email },
+  });
+  const table = currentUser.role.toLowerCase();
+  const updatedProfile = await (prisma[table] as any).update({
+    where: { email: currentUser.email },
+    data: payloadObj,
+  });
+
+  return updatedProfile;
+};
+
 export const userServices = {
   createAdminService,
   createDoctorService,
   createPatientService,
   getAllUsers,
   getMyProfile,
+  updateMyProfile,
 };

@@ -3,6 +3,7 @@ import { moduleRouterArray } from "../types/routesArray";
 import { AdminRouter } from "../modules/Admin/admin.routes";
 import { userRoutes } from "../modules/User/user.routes";
 import { AuthRouter } from "../modules/Auth/auth.routes";
+import { specialtiesRoutes } from "../modules/Specialties/specialties.route";
 
 const router = Router();
 
@@ -18,6 +19,10 @@ const moduleRoutes: moduleRouterArray = [
   {
     path: "/auth",
     route: AuthRouter,
+  },
+  {
+    path: "/specialties",
+    route: specialtiesRoutes,
   },
 ];
 

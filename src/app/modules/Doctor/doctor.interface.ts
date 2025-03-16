@@ -17,3 +17,17 @@ export type ISpecialties = {
   specialtiesId: string;
   isDeleted?: null;
 };
+
+export type IDoctorFilters = {
+  name?: string;
+  contactNumber?: string;
+  address?: string;
+  registrationNumber?: string;
+  experience?: number;
+  gender?: string;
+  apointmentFee?: number;
+  qualification?: string;
+  currentWorkingPlace?: string;
+  designation?: string;
+  searchTerm?: string;
+};

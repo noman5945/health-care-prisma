@@ -37,6 +37,8 @@ const getAllDoctors = async (
   andCondition.push({
     isDeleted: false,
   });
+
+  console.log(andCondition);
   const whereCondition: Prisma.DoctorWhereInput =
     andCondition.length > 0 ? { AND: andCondition } : {};
 
@@ -61,6 +63,38 @@ const getAllDoctors = async (
     },
     data: result,
   };
+};
+
+const deleteDoctor = async (doctorID: string) => {
+  const result = await prisma.$transaction(async (transClient) => {
+    const deleteDoctor = await transClient.doctor.delete({
+      where: { id: doctorID },
+    });
+
+    const deleteUser = await transClient.user.delete({
+      where: { email: deleteDoctor.email },
+    });
+
+    return deleteDoctor;
+  });
+
+  return result;
+};
+
+const softDeleteDoctor = async (doctorID: string) => {
+  const result = await prisma.$transaction(async (transClient) => {
+    const updateDeleteStatusDoc = await transClient.doctor.update({
+      where: { id: doctorID },
+      data: { isDeleted: true },
+    });
+    const updateDeleteStatusUser = await transClient.user.update({
+      where: { email: updateDeleteStatusDoc.email },
+      data: { status: "DELETED" },
+    });
+
+    return updateDeleteStatusDoc;
+  });
+  return result;
 };
 
 const updateDoctorData = async (doctorid: string, payload: IDoctorUpdate) => {
@@ -108,4 +142,6 @@ const updateDoctorData = async (doctorid: string, payload: IDoctorUpdate) => {
 export const doctorServices = {
   updateDoctorData,
   getAllDoctors,
+  deleteDoctor,
+  softDeleteDoctor,
 };

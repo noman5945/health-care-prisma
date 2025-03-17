@@ -25,7 +25,7 @@ export type IDoctorFilters = {
   registrationNumber?: string;
   experience?: number;
   gender?: string;
-  apointmentFee?: number;
+  appointmentFee?: number;
   qualification?: string;
   currentWorkingPlace?: string;
   designation?: string;

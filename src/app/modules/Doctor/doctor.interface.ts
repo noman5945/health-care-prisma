@@ -29,5 +29,6 @@ export type IDoctorFilters = {
   qualification?: string;
   currentWorkingPlace?: string;
   designation?: string;
+  specialties?: string;
   searchTerm?: string;
 };

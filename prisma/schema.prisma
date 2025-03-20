@@ -77,6 +77,7 @@ model Patient{
   updatedAt DateTime @updatedAt
   user User @relation(fields: [email],references: [email])
   @@map("patients")
+  PatientHealthData PatientHealthData?
 }
 
 model Specialties{
@@ -97,6 +98,30 @@ model  DoctorSpecialties{
    @@map("doctor_specialties")
 }
 
+model PatientHealthData{
+  id String @id @default(uuid())
+  patientId String @unique
+  dateOfBirth DateTime
+  gender Gender
+  bloodGroup BloodGroup
+  hasAllergies Boolean
+  hasDiabetes Boolean
+  height String
+  weight String
+  smokingStatus Boolean
+  dietaryPreferences String
+  pregnancyStatus Boolean
+  mentalHealthHistory String
+  immunizationStatus String
+  hasPastSurgeries Boolean
+  recentAnxiety Boolean
+  recentDepression Boolean
+  maritalStatus MaritalStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  patient Patient @relation(fields: [patientId],references: [id])
+}
+
 enum UserRole{
   SUPER_ADMIN
   ADMIN
@@ -113,4 +138,20 @@ enum UserStatus{
 enum Gender{
   MALE
   FEMALE
+}
+
+enum MaritalStatus{
+  MARRIED
+  UNMARRIED
+}
+
+enum BloodGroup{
+  A_POSITIVE
+  B_POSITIVE
+  O_POSITIVE
+  AB_POSITIVE
+  A_NEGETIVE
+  B_NEGETIVE
+  O_NEGETIVE
+  AB_NEGETIVE
 }

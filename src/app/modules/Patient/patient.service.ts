@@ -69,12 +69,47 @@ const getAllPatients = async (filters: any, paginationOptions: IOptions) => {
   };
 };
 
-const getPatientByID = async () => {};
+const getPatientByID = async (id: string) => {
+  const result = await prisma.patient.findUniqueOrThrow({
+    where: { id: id, isDeleted: false },
+  });
+  return result;
+};
 
-const updatePatientData = (id: string, updateData: any) => {};
+const deletePatient = async (id: string) => {
+  await prisma.patient.findUniqueOrThrow({
+    where: { id: id, isDeleted: false },
+  });
+  const result = await prisma.$transaction(async (transClient) => {
+    const patientDelete = await transClient.patient.delete({
+      where: { id: id },
+    });
+    const userDelete = await transClient.user.delete({
+      where: { email: patientDelete.email },
+    });
+
+    return patientDelete;
+  });
+  return result;
+};
+
+const softDeletePatient = async (id: string) => {
+  await prisma.patient.findUniqueOrThrow({ where: { id, isDeleted: false } });
+  const result = await prisma.patient.update({
+    where: { id },
+    data: {
+      isDeleted: true,
+    },
+  });
+  return result;
+};
+
+const updatePatientData = async (id: string, updateData: any) => {};
 
 export const PatientService = {
   getAllPatients,
   getPatientByID,
   updatePatientData,
+  deletePatient,
+  softDeletePatient,
 };

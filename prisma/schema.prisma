@@ -78,6 +78,7 @@ model Patient{
   user User @relation(fields: [email],references: [email])
   @@map("patients")
   PatientHealthData PatientHealthData?
+  MedicalReport MedicalReport[]
 }
 
 model Specialties{
@@ -117,6 +118,18 @@ model PatientHealthData{
   recentAnxiety Boolean
   recentDepression Boolean
   maritalStatus MaritalStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  patient Patient @relation(fields: [patientId],references: [id])
+
+  @@map("patient_health_data")
+}
+
+model MedicalReport{
+  id String @id @default(uuid())
+  patientId String
+  reportName String
+  reportLink String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   patient Patient @relation(fields: [patientId],references: [id])

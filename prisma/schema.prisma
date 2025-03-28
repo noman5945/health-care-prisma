@@ -63,6 +63,8 @@ model Doctor{
   user User @relation(fields: [email],references: [email])
   @@map("doctors")
   DoctorSpecialties DoctorSpecialties[]
+  DoctorSchedules DoctorSchedules[]
+  Appointment Appointment[]
 }
 
 model Patient{
@@ -79,6 +81,7 @@ model Patient{
   @@map("patients")
   PatientHealthData PatientHealthData?
   MedicalReport MedicalReport[]
+  Appointment Appointment[]
 }
 
 model Specialties{
@@ -135,6 +138,47 @@ model MedicalReport{
   patient Patient @relation(fields: [patientId],references: [id])
 }
 
+model Schedule{
+  id String @id @default(uuid())
+  startDateTime DateTime
+  endDateTime DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("schedules")
+  DoctorSchedules DoctorSchedules[]
+  Appointment Appointment?
+}
+
+model DoctorSchedules{
+  doctorId String
+  doctor Doctor @relation(fields: [doctorId],references: [id])
+  scheduleId String
+  schedule Schedule @relation(fields: [scheduleId],references: [id])
+  isBooked Boolean
+  appointmentId String @unique
+  appointment Appointment @relation(fields: [appointmentId],references: [id])
+
+  @@id([doctorId,scheduleId])
+}
+
+model Appointment{
+  id String @id @default(uuid())
+  patientId String
+  patient Patient @relation(fields: [patientId],references: [id])
+  doctorId String
+  doctor Doctor @relation(fields: [doctorId],references: [id])
+  scheduleId String @unique
+  schedule Schedule @relation(fields: [scheduleId],references: [id])
+  videoCallingId String
+  status AppointmentStatus
+  paymentStatus PaymentStatus
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  DoctorSchedules DoctorSchedules?
+}
+
 enum UserRole{
   SUPER_ADMIN
   ADMIN
@@ -167,4 +211,16 @@ enum BloodGroup{
   B_NEGETIVE
   O_NEGETIVE
   AB_NEGETIVE
+}
+
+enum AppointmentStatus{
+  SCHEDULED
+  INPROGRESS
+  COMPLETED
+  CANCELED
+}
+
+enum PaymentStatus{
+  PAID
+  UNPAID
 }

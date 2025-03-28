@@ -6,6 +6,7 @@ import { AuthRouter } from "../modules/Auth/auth.routes";
 import { specialtiesRoutes } from "../modules/Specialties/specialties.route";
 import { doctorsRoutes } from "../modules/Doctor/doctor.routes";
 import { patientRoutes } from "../modules/Patient/patient.routes";
+import { scheduleRoutes } from "../modules/Schedule/schedule.routes";
 
 const router = Router();
 
@@ -33,6 +34,10 @@ const moduleRoutes: moduleRouterArray = [
   {
     path: "/patient",
     route: patientRoutes,
+  },
+  {
+    path: "/schedule",
+    route: scheduleRoutes,
   },
 ];
 

@@ -47,8 +47,19 @@ function handleRequestTryCatch(fn: RequestHandler) {
   };
 }
 
+/**
+ * convert date into readable format
+ * @param date
+ * @returns
+ */
+const convertDateTime = async (date: Date) => {
+  const offset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() + offset);
+};
+
 export const utilFunctions = {
   encryptPassword,
   pickFilters,
   handleRequestTryCatch,
+  convertDateTime,
 };

@@ -13,7 +13,7 @@ const createNewDoctorSchedule = async (
       doctorId: existingDoctor.id,
       scheduleId: schedule,
       isBooked: false,
-      appointmentId: "1234",
+      //appointmentId: "1234",
     };
   });
 

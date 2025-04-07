@@ -37,12 +37,7 @@ function handleRequestTryCatch(fn: RequestHandler) {
     try {
       await fn(req, res, next);
     } catch (error: any) {
-      //next(error);
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: error?.name || "Something went wrong",
-        error: error,
-      });
+      next(error);
     }
   };
 }

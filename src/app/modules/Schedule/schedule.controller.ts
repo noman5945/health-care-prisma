@@ -46,7 +46,35 @@ const getAllSchedules = utilFunctions.handleRequestTryCatch(
   }
 );
 
+const getScheduleByID = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const scheduleID = req.params.id;
+    const result = await ScheduleService.getScheduleByID(scheduleID);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Schedules fetched",
+      data: result,
+    });
+  }
+);
+
+const deleteScheduleByID = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const scheduleID = req.params.id;
+    const result = await ScheduleService.deleteSchedule(scheduleID);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Schedules deleted",
+      data: result,
+    });
+  }
+);
+
 export const ScheduleController = {
   insertSchedule,
   getAllSchedules,
+  getScheduleByID,
+  deleteScheduleByID,
 };

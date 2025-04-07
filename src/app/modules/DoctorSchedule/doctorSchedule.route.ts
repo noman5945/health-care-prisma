@@ -11,4 +11,16 @@ router.post(
   DoctorScheduleController.createNewDoctorSchedule
 );
 
+router.get(
+  "/",
+  authorise(UserRole.DOCTOR),
+  DoctorScheduleController.getDoctorSchedule
+);
+
+router.delete(
+  "/:id",
+  authorise(UserRole.DOCTOR),
+  DoctorScheduleController.deleteDoctorSchedule
+);
+
 export const doctorScheduleRoutes = router;

@@ -32,7 +32,7 @@ def create_files(module_name,target_path):
     files={
         f"{module_name}.service.ts":SERVICE_TEMPLATE.format(name=module_name),
         f"{module_name}.controller.ts":CONTROLLER_TEMPLATE.format(name=module_name),
-        f"{module_name}.router.ts":SERVICE_TEMPLATE.format(name=module_name)
+        f"{module_name}.router.ts":ROUTER_TEMPLATE.format(name=module_name)
     }
 
     for file_name,content in files.items():

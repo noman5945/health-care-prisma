@@ -1,8 +1,15 @@
+import { Router } from "express";
+import { AppointmentController } from "./Appointment.controller";
+import authorise from "../../middlewares/authMiddeware";
+import { UserRole } from "@prisma/client";
 
-    import { Router } from 'express';
+const router = Router();
 
-    const router = Router();
+// define routes here
+router.post(
+  "/",
+  authorise(UserRole.PATIENT),
+  AppointmentController.createNewAppointment
+);
 
-    // define routes here
-
-    export default router;
+export const appointmentRoutes = router;

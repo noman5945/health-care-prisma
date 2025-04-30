@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { NextFunction, Request, RequestHandler, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
 import { StatusCodes } from "http-status-codes";
 
 async function encryptPassword(plainTextPass: string) {
@@ -52,9 +53,14 @@ const convertDateTime = async (date: Date) => {
   return new Date(date.getTime() + offset);
 };
 
+function generateUniqueId() {
+  return uuidv4();
+}
+
 export const utilFunctions = {
   encryptPassword,
   pickFilters,
   handleRequestTryCatch,
   convertDateTime,
+  generateUniqueId,
 };

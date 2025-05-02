@@ -26,7 +26,26 @@ const createNewAppointment = async (user: IAuthUser, payload: any) => {
     status,
     paymentStatus,
   };
-  const result = await prisma.appointment.create({ data: newData });
+  const result = await prisma.$transaction(async (tx) => {
+    const newAppointment = await tx.appointment.create({ data: newData });
+    const doctorAppointment = await tx.doctorSchedules.update({
+      where: {
+        doctorId_scheduleId: {
+          doctorId: payload.doctorId,
+          scheduleId: payload.scheduleId,
+        },
+      },
+      data: {
+        isBooked: true,
+        appointmentId: newAppointment.id,
+      },
+    });
+    /**
+     * Task: Apply Payment record.
+     */
+
+    return newAppointment;
+  });
   return result;
 };
 

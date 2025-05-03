@@ -21,6 +21,34 @@ const createNewAppointment = utilFunctions.handleRequestTryCatch(
   }
 );
 
+const getMyAppointments = utilFunctions.handleRequestTryCatch(
+  async (req: Request, res: Response) => {
+    const user = req.user as IAuthUser;
+    const filters = utilFunctions.pickFilters(req.query, [
+      "status",
+      "paymentStatus",
+    ]);
+    const options = utilFunctions.pickFilters(req.query, [
+      "limit",
+      "page",
+      "sortBy",
+      "sortOrder",
+    ]);
+    const result = await AppointmentServices.getMyAppointments(
+      user,
+      filters,
+      options
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Appointments fetched",
+      data: result,
+    });
+  }
+);
+
 export const AppointmentController = {
   createNewAppointment,
+  getMyAppointments,
 };
